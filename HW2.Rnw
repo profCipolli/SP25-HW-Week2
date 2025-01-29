@@ -1,0 +1,134 @@
+\documentclass{article}
+\usepackage[margin=1.0in]{geometry} % To set margins
+\usepackage{amsmath}  % This allows me to use the align functionality.
+                      % If you find yourself trying to replicate
+                      % something you found online, ensure you're
+                      % loading the necessary packages!
+\usepackage{amsfonts} % Math font
+\usepackage{fancyvrb}
+\usepackage{hyperref} % For including hyperlinks
+\usepackage[shortlabels]{enumitem}% For enumerated lists with labels specified
+                                  % We had to run tlmgr_install("enumitem") in R
+\usepackage{float}    % For telling R where to put a table/figure
+\usepackage{natbib}        %For the bibliography
+\bibliographystyle{apalike}%For the bibliography
+
+\begin{document}
+
+\begin{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% QUESTION 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item Consider the following integral:
+\[\int_{a}^{b} (7-x^2)dx.\]
+While this is a relatively straightforward integral -- split the difference and use power rule for integration -- we can approximate the area under this curve using Riemann sums. Below, I describe four rules for computing Riemann sums using rectangles of width $\delta_x$.
+\begin{itemize}
+  \item Left Rule uses the left points to create the rectangles.
+  \[\text{Area} = \delta_x (f(a) + f(a + \delta_x) + f(a +2\delta_x) + \cdots + f(b-\delta_x))\]
+  \item Right Rule uses the right points to create the rectangles.
+  \[\text{Area} = \delta_x (f(a + \delta_x) + f(a +2\delta_x) + \cdots + f(b-\delta_x) + f(b))\]
+  \item Midpoint Rule uses the midpoints between the left and right points to create the rectangles.
+  \[\text{Area} = \delta_x \left(f\left(a + \frac{\delta_x}{2}\right) + f\left(a + \frac{3\delta_x}{2}\right) + \cdots +  f\left(b - \frac{\delta_x}{2}\right)\right)\]
+  \item Trapezoidial Rule averages the rectangles created using left and right endpoints, which results in areas of trapezoids.
+  \[\text{Area} = \frac{1}{2} \delta_x \left(f(a) + 2f(a + \delta_x) + 2f(a+2\delta_x) + \cdots + f(b)\right)\]
+\end{itemize}
+The first step, is to create a function that computes the integrand.
+<<size="scriptsize", warning=FALSE, message=FALSE>>=
+integrand <- function(x){
+  f <- 7 - 2 * x^2
+  return(f)
+}
+@
+Next, I set up an example choice of $a$, $b$, and the number of rectangles.
+<<size="scriptsize", warning=FALSE, message=FALSE>>=
+a <- 0
+b <- 2
+n.rect <- 100
+(delta.x <- (b-a)/n.rect)
+@
+We can compute the area using the Left Rule as follows.
+<<size="scriptsize", warning=FALSE, message=FALSE>>=
+left.points <- a + 0:99*(delta.x)
+(left.area <- sum(delta.x*(integrand(left.points))))
+@
+We can compute the area using the Right Rule as follows.
+<<size="scriptsize", warning=FALSE, message=FALSE>>=
+right.points <- a + 1:100*(delta.x)
+(right.area <- sum(delta.x*(integrand(right.points))))
+@
+We can compute the area using the Midpoint Rule as follows.
+<<size="scriptsize", warning=FALSE, message=FALSE>>=
+mid.points <- (left.points+right.points)/2
+(mid.area <- sum(delta.x*(integrand(mid.points))))
+@
+\newpage
+\begin{enumerate}
+  \item Write code that computes the area using the Trapezoidial Rule.\\
+  \textbf{Solution:}
+<<size="scriptsize", warning=FALSE, message=FALSE>>=
+# Write code for answer here.
+@
+  \item Write a function that takes \texttt{a}, \texttt{b}, and number of 
+  rectangles (\texttt{n.rect}) in as input and returns the Trapezoidial Rule 
+  by default, but can return left, right, or midpoint when necessary. Use the
+  skeleton below. When you are done, remove \texttt{eval=FALSE} to show that
+  the function provides the expected result for the example above.\\
+  \textbf{Solution:}
+<<eval=FALSE, size="scriptsize", warning=FALSE, message=FALSE>>=
+riemann.sums <- function(fnct,                        # function to integrate
+                         a,                           # lower bound of integral
+                         b,                           # upper bound of integral
+                         n.rect,                      # number of  bound of integral
+                         method = "Trapezoidial"){    # method to use (trap by default)
+  ######################################
+  # Check Input
+  ######################################
+  if(!is.numeric(a)){ # if a is not numeric
+    stop("The lower bound of the integral (a) must be numeric.")
+  }
+  if(!is.numeric(b)){ # if b is not numeric
+    stop("The lower bound of the integral (a) must be numeric.")
+  }
+  if(!(is.numeric(n.rect)) | (n.rect%%1!=0)){ # if n.rect is not a whole number
+    stop("The number of rectangles must be a positive whole number.")
+  }
+  ######################################
+  # Compute Area
+  ######################################
+  if(method == "Left"){
+    # Add necessary code here
+  }else if(method == "Right"){
+    # Add necessary code here
+  }else if(method == "Midpoint"){
+    # Add necessary code here
+  }else if(method == "Trapezoidial"){
+    # Add necessary code here
+  }else{
+    stop("Please select a valid method (e.g., 'Left', 'Right', 'Midpoint', 'Trapezoidial')")
+  }
+  ######################################
+  # Return the area
+  ######################################
+  return(area)
+}
+######################################
+# Test the function
+######################################
+riemann.sums(fnct = integrand,
+             a = 0,
+             b = 2,
+             n.rect = 100)
+######################################
+# Compare to numerical integral
+######################################
+integrate(f = integrand, # integrate() is an R function
+          lower = 0,     # that completes numerical
+          upper = 2)     # integration
+@
+\end{enumerate}
+\end{enumerate}
+
+\bibliography{bibliography}
+\end{document}
